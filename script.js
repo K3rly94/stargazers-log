@@ -2,11 +2,14 @@ const repositoryList = document.querySelector('#repository-list');
 const repositoryCount = document.querySelector('#repository-count');
 
 function formatDate(dateString) {
+  // fallback if date is invalid
+  const d = new Date(`${dateString}T00:00:00`);
+  if (Number.isNaN(d.getTime())) return dateString;
   return new Intl.DateTimeFormat('en', {
     month: 'short',
     day: 'numeric',
     year: 'numeric'
-  }).format(new Date(`${dateString}T00:00:00`));
+  }).format(d);
 }
 
 function createRepositoryElement(repository) {
@@ -16,23 +19,32 @@ function createRepositoryElement(repository) {
   const details = document.createElement('div');
   const link = document.createElement('a');
   link.className = 'repository-name';
-  link.href = repository.html_url;
+  link.href = repository.html_url || '#';
   link.target = '_blank';
-  link.rel = 'noreferrer';
-  link.textContent = repository.full_name;
+  link.rel = 'noopener noreferrer';
+  link.textContent = repository.full_name || repository.name || 'Repository';
 
   const description = document.createElement('p');
   description.className = 'repository-description';
-  description.textContent = repository.description;
+  description.textContent = repository.description || '';
 
   const meta = document.createElement('div');
   meta.className = 'repository-meta';
-  meta.textContent = `${repository.language}  /  ${repository.stargazers_count.toLocaleString()} stars`;
+  const metaParts = [];
+  if (repository.language) metaParts.push(repository.language);
+  if (typeof repository.stargazers_count === 'number') {
+    metaParts.push(`${repository.stargazers_count.toLocaleString()} stars`);
+  }
+  meta.textContent = metaParts.join('  /  ');
 
   const date = document.createElement('time');
   date.className = 'repository-date';
-  date.dateTime = repository.starred_at;
-  date.textContent = `Starred ${formatDate(repository.starred_at)}`;
+  if (repository.starred_at) {
+    date.dateTime = repository.starred_at;
+    date.textContent = `Starred ${formatDate(repository.starred_at)}`;
+  } else {
+    date.textContent = '';
+  }
 
   details.append(link, description, meta);
   article.append(details, date);
@@ -50,8 +62,10 @@ async function loadRepositories() {
     repositoryCount.textContent = `${repositories.length} repositories`;
     repositoryList.replaceChildren(...repositories.map(createRepositoryElement));
   } catch (error) {
-    repositoryCount.textContent = 'Unavailable';
-    repositoryList.innerHTML = '<p class="status-message">The repository log could not be loaded. Try refreshing the page.</p>';
+    if (repositoryCount) repositoryCount.textContent = 'Unavailable';
+    if (repositoryList) {
+      repositoryList.innerHTML = '<p class="status-message">The repository log could not be loaded. Try refreshing the page.</p>';
+    }
     console.error(error);
   }
 }
