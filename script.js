@@ -2,9 +2,13 @@ const repositoryList = document.querySelector('#repository-list');
 const repositoryCount = document.querySelector('#repository-count');
 
 function formatDate(dateString) {
-  // fallback if date is invalid
-  const d = new Date(`${dateString}T00:00:00`);
-  if (Number.isNaN(d.getTime())) return dateString;
+  const tryParse = d => (d instanceof Date && !Number.isNaN(d.getTime())) ? d : null;
+
+  // Try parsing as-is, then try appending a time if that fails.
+  let d = tryParse(new Date(dateString));
+  if (!d) d = tryParse(new Date(`${dateString}T00:00:00`));
+  if (!d) return dateString; // fallback to original string if parsing fails
+
   return new Intl.DateTimeFormat('en', {
     month: 'short',
     day: 'numeric',
@@ -17,6 +21,7 @@ function createRepositoryElement(repository) {
   article.className = 'repository';
 
   const details = document.createElement('div');
+
   const link = document.createElement('a');
   link.className = 'repository-name';
   link.href = repository.html_url || '#';
@@ -24,9 +29,13 @@ function createRepositoryElement(repository) {
   link.rel = 'noopener noreferrer';
   link.textContent = repository.full_name || repository.name || 'Repository';
 
-  const description = document.createElement('p');
-  description.className = 'repository-description';
-  description.textContent = repository.description || '';
+  // Only create description element when there's something to show
+  let description = null;
+  if (repository.description) {
+    description = document.createElement('p');
+    description.className = 'repository-description';
+    description.textContent = repository.description;
+  }
 
   const meta = document.createElement('div');
   meta.className = 'repository-meta';
@@ -35,7 +44,8 @@ function createRepositoryElement(repository) {
   if (typeof repository.stargazers_count === 'number') {
     metaParts.push(`${repository.stargazers_count.toLocaleString()} stars`);
   }
-  meta.textContent = metaParts.join('  /  ');
+  // Use a thin separator for better visuals
+  meta.textContent = metaParts.join(' · ');
 
   const date = document.createElement('time');
   date.className = 'repository-date';
@@ -46,7 +56,10 @@ function createRepositoryElement(repository) {
     date.textContent = '';
   }
 
-  details.append(link, description, meta);
+  details.append(link);
+  if (description) details.append(description);
+  details.append(meta);
+
   article.append(details, date);
   return article;
 }
@@ -59,7 +72,10 @@ async function loadRepositories() {
     }
 
     const repositories = await response.json();
+    if (!Array.isArray(repositories)) throw new Error('Invalid data format: expected an array');
+
     repositoryCount.textContent = `${repositories.length} repositories`;
+    // preserve order from file, but ensure we don't pass undefined
     repositoryList.replaceChildren(...repositories.map(createRepositoryElement));
   } catch (error) {
     if (repositoryCount) repositoryCount.textContent = 'Unavailable';
@@ -70,4 +86,10 @@ async function loadRepositories() {
   }
 }
 
-loadRepositories();
+// Only attempt to load when the expected DOM is present
+if (!repositoryList || !repositoryCount) {
+  console.warn('Missing #repository-list or #repository-count in DOM — skipping repository load.');
+} else {
+  // Defer call to loadRepositories so that it runs after parsing (script is already deferred in HTML)
+  loadRepositories();
+}
