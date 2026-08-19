@@ -1,2 +1,2 @@
-#stargazers-log
+# stargazers-log
 Minu tärniga pärjatud hoidlate logi
