@@ -1,0 +1,38 @@
+[
+  {
+    "name": "astro",
+    "full_name": "withastro/astro",
+    "description": "The web framework for content-driven websites.",
+    "html_url": "https://github.com/withastro/astro",
+    "language": "TypeScript",
+    "stargazers_count": 48000,
+    "starred_at": "2026-08-12"
+  },
+  {
+    "name": "ruff",
+    "full_name": "astral-sh/ruff",
+    "description": "An extremely fast Python linter and code formatter.",
+    "html_url": "https://github.com/astral-sh/ruff",
+    "language": "Rust",
+    "stargazers_count": 44000,
+    "starred_at": "2026-07-28"
+  },
+  {
+    "name": "pocketbase",
+    "full_name": "pocketbase/pocketbase",
+    "description": "Open Source backend in 1 file.",
+    "html_url": "https://github.com/pocketbase/pocketbase",
+    "language": "Go",
+    "stargazers_count": 42000,
+    "starred_at": "2026-07-04"
+  },
+  {
+    "name": "htmx",
+    "full_name": "bigskysoftware/htmx",
+    "description": "High power tools for HTML.",
+    "html_url": "https://github.com/bigskysoftware/htmx",
+    "language": "JavaScript",
+    "stargazers_count": 39000,
+    "starred_at": "2026-06-19"
+  }
+]
