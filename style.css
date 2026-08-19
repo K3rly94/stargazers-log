@@ -1,0 +1,172 @@
+:root {
+  color-scheme: light;
+  --ink: #17221d;
+  --muted: #6c7871;
+  --line: #d8e0da;
+  --paper: #f4f7f2;
+  --card: #ffffff;
+  --accent: #d8673d;
+  --accent-soft: #f8e6dc;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.page-shell {
+  width: min(100% - 2rem, 860px);
+  margin: 0 auto;
+  padding: 4rem 0 5rem;
+}
+
+.page-header {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 2.5rem;
+}
+
+.eyebrow {
+  margin: 0 0 1rem;
+  color: var(--accent);
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 0.75rem;
+  font-size: clamp(2.8rem, 8vw, 5.5rem);
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+}
+
+.intro {
+  max-width: 34rem;
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+
+.repository-section {
+  padding-top: 2rem;
+}
+
+.section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  margin-bottom: 0;
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.repository-count {
+  color: var(--muted);
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.repository-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.repository {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1.35rem 1.5rem;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  background: var(--card);
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.repository:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(23, 34, 29, 0.08);
+}
+
+.repository-name {
+  margin-bottom: 0.35rem;
+  color: var(--ink);
+  font-size: 1.35rem;
+  text-decoration: none;
+}
+
+.repository-name:hover {
+  color: var(--accent);
+}
+
+.repository-description {
+  margin-bottom: 0.75rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.repository-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  color: var(--muted);
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 0.75rem;
+}
+
+.repository-date {
+  align-self: start;
+  padding: 0.4rem 0.6rem;
+  background: var(--accent-soft);
+  color: #9c482d;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.status-message {
+  padding: 1.5rem;
+  border: 1px dashed var(--line);
+  color: var(--muted);
+}
+
+@media (max-width: 540px) {
+  .page-shell {
+    padding-top: 2.5rem;
+  }
+
+  .repository {
+    grid-template-columns: 1fr;
+    padding: 1.15rem;
+  }
+
+  .repository-date {
+    justify-self: start;
+  }
+}
